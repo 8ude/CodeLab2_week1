@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
 
-	Sprite[] sprites;
+	public Sprite[] sprites;
 
-
+    public int index;
 
 	// Use this for initialization
 	void Start () {
-		
+        InvokeRepeating("SpawnSprite", 0f, 1f);
 	}
 	
 	// Update is called once per frame
@@ -21,7 +21,10 @@ public class Spawner : MonoBehaviour {
 	void SpawnSprite() {
 
 		GameObject goSprite = new GameObject();
-		goSprite.AddComponent<RigidBody2D>();
+        SpriteRenderer goRenderer = goSprite.AddComponent<SpriteRenderer>();
+        goRenderer.sprite = sprites[index % sprites.Length];
+        index++;
+        goSprite.AddComponent<Rigidbody2D>();
 	
 	}
 }

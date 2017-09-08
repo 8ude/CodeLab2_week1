@@ -8,9 +8,11 @@ public class OrderedNumberGenerator : NumberGenerator {
 
 	int current;
 
-	public override int Next() {
+    public override int Next() {
 
 		int result = order[current % order.Length];
+
+        current++;
 
 		return result;
 
