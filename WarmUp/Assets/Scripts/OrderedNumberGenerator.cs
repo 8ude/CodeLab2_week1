@@ -6,16 +6,13 @@ public class OrderedNumberGenerator : NumberGenerator {
 
 	public int[] order;
 
-	int current;
+	int current = 0;
 
-    public override int Next() {
-
+	public override int Next() {
 		int result = order[current % order.Length];
 
-        current++;
+		current++;
 
 		return result;
-
 	}
-
 }

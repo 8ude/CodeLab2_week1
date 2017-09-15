@@ -4,27 +4,65 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
 
-	public Sprite[] sprites;
+    public Sprite redBallSprite, greenBallSprite, blueBallSprite, yellowBallSprite;
+    float spawnPerSecondRate = 2f;
+    float timeSinceSpawn;
+    float minSpawnTime = 0.3f;
 
-    public int index;
+    public GameObject generiBall;
+
+    public Vector2 minBound;
+    public Vector2 maxBound;
 
 	// Use this for initialization
-	void Start () {
-        InvokeRepeating("SpawnSprite", 0f, 1f);
+	void Start() {
+        SpriteTime();
+		InvokeRepeating("SpriteTime", 1, 1);
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
-		
+	void Update() {
+        timeSinceSpawn += Time.deltaTime;
+        if (timeSinceSpawn >= spawnPerSecondRate) {
+            timeSinceSpawn = 0f;
+            SpriteTime();
+        }
 	}
 
-	void SpawnSprite() {
+	void SpriteTime() {
+		int nextNum = GetComponent<NumberGenerator>().Next();
 
-		GameObject goSprite = new GameObject();
-        SpriteRenderer goRenderer = goSprite.AddComponent<SpriteRenderer>();
-        goRenderer.sprite = sprites[index % sprites.Length];
-        index++;
-        goSprite.AddComponent<Rigidbody2D>();
-	
+		MakeSprite(nextNum);
+
+        if (spawnPerSecondRate >= 0.2f) {
+            spawnPerSecondRate -= Time.deltaTime;
+        }
+	}
+
+	void MakeSprite(int num) {
+        GameObject newBall = Instantiate(generiBall, transform.position, Quaternion.identity); 
+        switch (num) {
+            case 0:
+                newBall.AddComponent<GreenBall>();
+                newBall.GetComponent<SpriteRenderer>().sprite = greenBallSprite;
+                break;
+            case 1:
+                newBall.AddComponent<BlueBall>();
+                newBall.GetComponent<SpriteRenderer>().sprite = blueBallSprite;
+                break;
+            case 2:
+                newBall.AddComponent<RedBall>();
+                newBall.GetComponent<SpriteRenderer>().sprite = redBallSprite;
+                break;
+            case 3:
+                newBall.AddComponent<YellowBall>();
+                newBall.GetComponent<SpriteRenderer>().sprite = yellowBallSprite;
+                break;
+                
+                
+        }
+        float newX = Random.Range(minBound.x, maxBound.x);
+        float newY = Random.Range(minBound.y, maxBound.y);
+        transform.position = new Vector3(newX, newY, 0f);
 	}
 }
